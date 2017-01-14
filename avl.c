@@ -20,7 +20,7 @@ struct AVL * construct_tree()
 	return avl;
 }
 
-void bst_insert(struct AVL *avl, int key)
+struct node * bst_insert(struct AVL *avl, int key)
 {
 	struct node *newNode = (struct node *)malloc(sizeof(struct node));
 	newNode -> key = key;
@@ -34,7 +34,7 @@ void bst_insert(struct AVL *avl, int key)
 	{
 		avl -> root = newNode;
 		avl -> root -> parent = NULL;
-		return ;
+		return newNode;
 	}
 
 
@@ -49,7 +49,7 @@ void bst_insert(struct AVL *avl, int key)
 
 
 
-				return;
+				return newNode ;
 			}
 			p = p -> left;
 
@@ -61,14 +61,14 @@ void bst_insert(struct AVL *avl, int key)
 
 				newNode -> parent = p;
 				p -> right = newNode;
-				return ;
+				return newNode;
 			}
 			p = p -> right;
 		}
 		else
 		{
 			// Equal key are not allower in BST
-			return ;
+			return NULL;
 		}
 	}
 }
@@ -159,15 +159,54 @@ void right_left_rotation(struct node *N)
 	left_rotation(N);
 }
 
-void insert(struct AVL * avl, int key)
-{
 
-}
 
 void balancing(struct node *N, int bal)
 {
-	if (N -> parent)
+	int m = balance(N);
+	if (2 == m)
 	{
-
+		if (1 == bal)
+		{
+			right_rotation(N);
+		}
+		else if (-1 == bal)
+		{
+			right_left_rotation(N);
+		}
+		else
+		{
+			printf("\nE: 1Wrong happen");
+		}
 	}
+	else if (-2 == m)
+	{
+		if (-1 == m)
+		{
+			left_rotation(N);
+		}
+		else if (1 == m)
+		{
+			left_right_rotation(N);
+		}
+		else
+		{
+			printf("\nE: 2Wrong happen");
+		}
+	}
+	else if (N -> parent)
+	{
+		balancing(N -> parent, m);
+	}
+	else
+	{
+		printf("\nBalancing if over\n");
+	}
+
+}
+
+void insert(struct AVL * avl, int key)
+{
+	struct node *N = bst_insert(avl, key);
+	balancing(N, 0);
 }
