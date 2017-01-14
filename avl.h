@@ -12,7 +12,8 @@ struct node
 {
 	int key;
 	struct node *right;
-	struct node * left;
+	struct node *left;
+	struct node *parent;
 	//int height;
 };
 
