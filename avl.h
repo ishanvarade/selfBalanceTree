@@ -13,6 +13,7 @@ struct node
 	int key;
 	struct node *right;
 	struct node * left;
+	//int height;
 };
 
 struct AVL

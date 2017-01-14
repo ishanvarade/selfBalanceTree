@@ -9,6 +9,9 @@
 #include <stdio.h>
 #include "avl.h"
 
+#define balance(node) \
+		(int)(height_tree(node -> right) - height_tree(node -> left)) \
+
 struct AVL * construct_tree()
 {
 	struct AVL *avl = (struct AVL *)malloc(sizeof (struct AVL));
@@ -45,7 +48,7 @@ void bst_insert(struct AVL *avl, int key)
 			p = p -> left;
 
 		}
-		else
+		else if(p -> key < newNode -> key)
 		{
 			if (NULL == p -> right)
 			{
@@ -53,6 +56,11 @@ void bst_insert(struct AVL *avl, int key)
 				return ;
 			}
 			p = p -> right;
+		}
+		else
+		{
+			// Equal key are not allower in BST
+			return ;
 		}
 	}
 }
@@ -76,7 +84,7 @@ void inorder(struct node *root)
 		inorder(root -> left);
 	}
 
-	printf("%d, ", root -> key);
+	printf("key: %d, balance: %d ", root -> key, balance(root));
 
 	if (root -> right)
 	{
@@ -98,3 +106,19 @@ void left_rotation(struct node *N)
 	right_child -> left = N;
 }
 
+void left_right_rotation(struct node *N)
+{
+	left_rotation(N -> left);
+	right_rotation(N);
+}
+
+void right_left_rotation(struct node *N)
+{
+	right_rotation(N -> right);
+	left_rotation(N);
+}
+
+void insert(struct AVL * avl, int key)
+{
+
+}
