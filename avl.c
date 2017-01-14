@@ -84,3 +84,17 @@ void inorder(struct node *root)
 	}
 }
 
+void right_rotation(struct node *N)
+{
+	struct node *left_child = N -> left;
+	N -> left = left_child -> right;
+	left_child -> right = N;
+}
+
+void left_rotation(struct node *N)
+{
+	struct node *right_child = N -> right;
+	N -> right = right_child -> right;
+	right_child -> left = N;
+}
+
