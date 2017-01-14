@@ -22,7 +22,7 @@ struct AVL
 };
 
 struct AVL * construct_tree();
-void insert(struct AVL *avl, int key);
-void inorder(struct AVL *avl);
+void bst_insert(struct AVL *avl, int key);
+void inorder(struct node *root);
 
 #endif /* AVL_H_ */

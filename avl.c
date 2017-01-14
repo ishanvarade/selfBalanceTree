@@ -6,12 +6,14 @@
  */
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "avl.h"
 
 struct AVL * construct_tree()
 {
 	struct AVL *avl = (struct AVL *)malloc(sizeof (struct AVL));
 	avl -> root = NULL;
+	avl -> number_node = 0;
 	return avl;
 }
 
@@ -22,6 +24,7 @@ void bst_insert(struct AVL *avl, int key)
 	newNode -> right = NULL;
 	newNode -> left = NULL;
 
+	++avl -> number_node;
 	struct node *p = avl -> root;
 	if (avl -> root == NULL)
 	{
@@ -39,7 +42,7 @@ void bst_insert(struct AVL *avl, int key)
 				p -> left = newNode;
 				return;
 			}
-				p = p -> left;
+			p = p -> left;
 
 		}
 		else
@@ -54,4 +57,30 @@ void bst_insert(struct AVL *avl, int key)
 	}
 }
 
-void inorder(struct AVL *avl);
+int height_tree(struct node * root)
+{
+	if (root)
+	{
+		int lh = height_tree(root -> left);
+		int rh = height_tree(root -> right);
+		return 1 + (lh > rh ? lh : rh);
+	}
+	return 0;
+}
+
+
+void inorder(struct node *root)
+{
+	if (root -> left)
+	{
+		inorder(root -> left);
+	}
+
+	printf("%d, ", root -> key);
+
+	if (root -> right)
+	{
+		inorder(root -> right);
+	}
+}
+
