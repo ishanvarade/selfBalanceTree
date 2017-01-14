@@ -10,7 +10,7 @@
 #include "avl.h"
 
 #define balance(node) \
-		(int)(height_tree(node -> right) - height_tree(node -> left)) \
+		(int)(__height_tree(node -> right) - __height_tree(node -> left)) \
 
 struct AVL * construct_tree()
 {
@@ -46,9 +46,6 @@ struct node * bst_insert(struct AVL *avl, int key)
 			{
 				p -> left = newNode;
 				newNode -> parent = p;
-
-
-
 				return newNode ;
 			}
 			p = p -> left;
@@ -58,7 +55,6 @@ struct node * bst_insert(struct AVL *avl, int key)
 		{
 			if (NULL == p -> right)
 			{
-
 				newNode -> parent = p;
 				p -> right = newNode;
 				return newNode;
@@ -73,17 +69,21 @@ struct node * bst_insert(struct AVL *avl, int key)
 	}
 }
 
-int height_tree(struct node * root)
+int __height_tree(struct node * root)
 {
 	if (root)
 	{
-		int lh = height_tree(root -> left);
-		int rh = height_tree(root -> right);
+		int lh = __height_tree(root -> left);
+		int rh = __height_tree(root -> right);
 		return 1 + (lh > rh ? lh : rh);
 	}
 	return 0;
 }
 
+int height_tree(struct AVL * avl)
+{
+	return __height_tree(avl -> root);
+}
 
 void inorder(struct node *root)
 {
@@ -100,11 +100,29 @@ void inorder(struct node *root)
 	}
 }
 
+void preorder(struct node *root)
+{
+	printf("key: %d, balance: %d ", root -> key, balance(root));
+
+	if (root -> left)
+	{
+		preorder(root -> left);
+	}
+
+	if (root -> right)
+	{
+		preorder(root -> right);
+	}
+}
+
 void right_rotation(struct node *N)
 {
 	struct node *left_child = N -> left;
 	N -> left = left_child -> right;
-	N -> left -> parent = N;
+	if (N -> left)
+	{
+		N -> left -> parent = N;
+	}
 
 	left_child -> parent = N -> parent;
 
@@ -128,7 +146,10 @@ void left_rotation(struct node *N)
 {
 	struct node *right_child = N -> right;
 	N -> right = right_child -> left;
-	N -> right -> parent = N;
+	if (N -> right)
+	{
+		N -> right -> parent = N;
+	}
 
 	right_child -> parent = N -> parent;
 
@@ -161,14 +182,14 @@ void right_left_rotation(struct node *N)
 
 
 
-void balancing(struct node *N, int bal)
+void balancing(struct AVL *avl, struct node *N, int bal)
 {
 	int m = balance(N);
 	if (2 == m)
 	{
 		if (1 == bal)
 		{
-			right_rotation(N);
+			left_rotation(N);
 		}
 		else if (-1 == bal)
 		{
@@ -178,12 +199,17 @@ void balancing(struct node *N, int bal)
 		{
 			printf("\nE: 1Wrong happen");
 		}
+
+		if (N == avl -> root)
+		{
+			avl -> root = N -> parent;
+		}
 	}
 	else if (-2 == m)
 	{
 		if (-1 == m)
 		{
-			left_rotation(N);
+			right_rotation(N);
 		}
 		else if (1 == m)
 		{
@@ -193,10 +219,15 @@ void balancing(struct node *N, int bal)
 		{
 			printf("\nE: 2Wrong happen");
 		}
+
+		if (N == avl -> root)
+		{
+			avl -> root = N -> parent;
+		}
 	}
 	else if (N -> parent)
 	{
-		balancing(N -> parent, m);
+		balancing(avl, N -> parent, m);
 	}
 	else
 	{
@@ -208,5 +239,5 @@ void balancing(struct node *N, int bal)
 void insert(struct AVL * avl, int key)
 {
 	struct node *N = bst_insert(avl, key);
-	balancing(N, 0);
+	balancing(avl, N, 0);
 }
