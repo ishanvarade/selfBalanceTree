@@ -28,7 +28,6 @@ int main()
 		printf("\n");
 		printf("\nHeight: %d\n",height_tree(avl));
 		printf("\n********************************************************\n");
-
 	}
 
 	//inorder(avl -> root);
