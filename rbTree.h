@@ -38,10 +38,10 @@ struct rbTree
 };
 
 struct rbTree * construct_tree();
-void insert(struct rbTree *avl, int key);
+void insert(struct rbTree *rb_tree, int key);
 void inorder(struct node *root);
 void preorder(struct node *root);
-int height_tree(struct AVL * avl);
+int height_tree(struct rbTree * rb_tree);
 
 
 #endif /* RBTREE_H_ */
