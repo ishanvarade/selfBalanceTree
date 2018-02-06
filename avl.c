@@ -236,6 +236,7 @@ void balancing(struct AVL *avl, struct node *N, int bal)
 
 }
 
+/*ishan is my name*/
 void insert(struct AVL * avl, int key)
 {
 	struct node *N = bst_insert(avl, key);
